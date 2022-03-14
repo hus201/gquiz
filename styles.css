@@ -1,0 +1,118 @@
+/* styles using by gquiz */
+.path-mod-gquiz span.gquiz_info {
+    font-weight: bold;
+}
+
+.path-mod-gquiz div.gquiz_is_dependent {
+    background: #ddd;
+}
+
+.path-mod-gquiz span.gquiz_depend {
+    color: #f00;
+}
+
+.path-mod-gquiz hr.gquiz_pagebreak {
+    height: 4px;
+    color: #aaa;
+    background-color: #aaa;
+    border: 0;
+    margin: 0;
+}
+
+.path-mod-gquiz .drag_target_active {
+    opacity: .25;
+}
+
+.path-mod-gquiz .drag_item_active {
+    opacity: .5;
+}
+
+.path-mod-gquiz .gquiz_bar_image {
+    height: 10px;
+}
+
+.path-mod-gquiz #analysis-form label {
+    display: inline;
+}
+
+.path-mod-gquiz .templateslist td.cell.action,
+.path-mod-gquiz .templateslist th.header.action {
+    width: 10%;
+}
+
+/* Analysis page */
+.path-mod-gquiz table.analysis {
+    width: 100%;
+    border-top: 1px solid #aaa;
+    margin-top: 10px;
+}
+
+.path-mod-gquiz table.analysis tr:first-child th {
+    padding-top: 10px;
+}
+
+.path-mod-gquiz table.analysis tr:hover {
+    background: #f5f5f5;
+}
+
+.path-mod-gquiz table.analysis td.singlevalue:before,
+.path-mod-gquiz table.analysis td.optionname:before {
+    content: '- ';
+}
+
+.path-mod-gquiz table.analysis.itemtype_textarea td {
+    padding: 4px 0;
+}
+
+.path-mod-gquiz table.analysis tr.isempty {
+    display: none;
+}
+
+/* Responses list */
+.path-mod-gquiz #showentrytable td.cell.completed_timemodified,
+.path-mod-gquiz #showentryanontable td.cell.random_response {
+    font-weight: bold;
+}
+
+.path-mod-gquiz #showentrytable td.cell.userpic,
+.path-mod-gquiz #showentrytable td.cell.deleteentry,
+.path-mod-gquiz #showentryanontable td.cell.deleteentry {
+    width: 10px;
+}
+
+/* Responses navigation */
+.path-mod-gquiz .response_navigation {
+    margin: .5em 0;
+}
+
+.path-mod-gquiz .response_navigation a {
+    display: block;
+}
+
+.path-mod-gquiz .response_navigation a.back_to_list {
+    text-align: center;
+}
+
+.path-mod-gquiz .response_navigation .prev_response:before {
+    /*rtl:raw:
+    content: ' ► ';
+    */
+    /*rtl:remove*/
+    content: ' ◄ ';
+}
+
+.path-mod-gquiz .response_navigation .next_response:after {
+    /*rtl:raw:
+    content: ' ◄ ';
+    */
+    /*rtl:remove*/
+    content: ' ► ';
+}
+
+.path-mod-gquiz .response_navigation .next_response {
+    text-align: right;
+}
+
+.path-mod-gquiz .response_navigation .prev_response {
+    text-align: left;
+}
