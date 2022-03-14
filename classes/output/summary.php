@@ -46,20 +46,20 @@ class summary implements renderable, templatable {
     /** @var int */
     protected $mygroupid;
 
-    /** @var bool  */
-    protected $extradetails;
-
     /**
      * Constructor.
      *
+     * @todo MDL-71494 Final deprecation of the $extradetails parameter in Moodle 4.3
      * @param mod_gquiz_structure $gquizstructure
      * @param int $mygroupid currently selected group
-     * @param bool $extradetails display additional details (time open, time closed)
+     * @param bool|null $extradetails Deprecated
      */
-    public function __construct($gquizstructure, $mygroupid = false, $extradetails = false) {
+    public function __construct($gquizstructure, $mygroupid = false, $extradetails = null) {
+        if (isset($extradetails)) {
+            debugging('The $extradetails parameter is deprecated.', DEBUG_DEVELOPER);
+        }
         $this->gquizstructure = $gquizstructure;
         $this->mygroupid = $mygroupid;
-        $this->extradetails = $extradetails;
     }
 
     /**
@@ -72,12 +72,6 @@ class summary implements renderable, templatable {
         $r = new stdClass();
         $r->completedcount = $this->gquizstructure->count_completed_responses($this->mygroupid);
         $r->itemscount = count($this->gquizstructure->get_items(true));
-        if ($this->extradetails && ($timeopen = $this->gquizstructure->get_gquiz()->timeopen)) {
-            $r->timeopen = userdate($timeopen);
-        }
-        if ($this->extradetails && ($timeclose = $this->gquizstructure->get_gquiz()->timeclose)) {
-            $r->timeclose = userdate($timeclose);
-        }
 
         return $r;
     }

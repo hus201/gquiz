@@ -14,9 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
+
 defined('MOODLE_INTERNAL') OR die('not allowed');
 require_once($CFG->dirroot.'/mod/gquiz/item/gquiz_item_class.php');
 require_once($CFG->dirroot.'/mod/gquiz/classes/markcalculator.php');
+
 class gquiz_item_textfield extends gquiz_item_base {
     protected $type = "textfield";
 
@@ -60,19 +64,23 @@ class gquiz_item_textfield extends gquiz_item_base {
                              'typ' => $item->typ,
                              'items' => $gquizitems,
                              'gquiz' => $gquiz->id);
+        
 
         //build the form
         $customdata = array('item' => $item,
                             'common' => $commonparams,
                             'positionlist' => $positionlist,
-                            'position' => $position);
-         //Added by gquiz Start
-         if($item->isgraded){
-            $gradedata = $DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
-            $item->grade = $gradedata->grade;
-            $item->answer = $gradedata->answer;
-        }
-        //Added by gquiz End
+                            'position' => $position,
+                            
+                        );
+            //Added by gquiz Start
+            if($item->isgraded){
+                $gradedata = $DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
+                $item->grade = $gradedata->grade;
+                $item->answer = $gradedata->answer;
+            }
+            //Added by gquiz End
+                         
         $this->item_form = new gquiz_textfield_form('edit_item.php', $customdata);
     }
 
@@ -92,18 +100,18 @@ class gquiz_item_textfield extends gquiz_item_base {
         $item->hasvalue = $this->get_hasvalue();
         if (!$item->id) {
             $item->id = $DB->insert_record('gquiz_item', $item);
-             //Added by gquiz Start
-             if($item->isgraded){
-                $grade= new stdClass;
-                $grade->itemid= $item->id;
-                $grade->grade= $item->grade;
-                $grade->answer =$item->answer;
-                $DB->insert_record('gquiz_graded_qustions',$grade);
-                }
-                //Added by gquiz End
+            //Added by gquiz Start
+            if($item->isgraded){
+            $grade= new stdClass;
+            $grade->itemid= $item->id;
+            $grade->grade= $item->grade;
+            $grade->answer =$item->answer;
+            $DB->insert_record('gquiz_graded_qustions',$grade);
+            }
+            //Added by gquiz End
         } else {
             $DB->update_record('gquiz_item', $item);
-            //Added by gquiz Start
+               //Added by gquiz Start
                 //check if Edited Value is graded
                 if($item->isgraded){
                     $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
@@ -123,6 +131,7 @@ class gquiz_item_textfield extends gquiz_item_base {
                         $DB->insert_record('gquiz_graded_qustions',$grade);
                     }
                     mark_calculator::recalcluate_marks(0,$item->gquiz);
+                    
                 }else {
                     $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
                     //Check if There is grade in db 
@@ -134,7 +143,6 @@ class gquiz_item_textfield extends gquiz_item_base {
                 }
                 //Added by gquiz End
         }
-
         return $DB->get_record('gquiz_item', array('id'=>$item->id));
     }
 

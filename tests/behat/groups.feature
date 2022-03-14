@@ -50,9 +50,7 @@ Feature: gquizs in courses with groups
       | gquiz   | Site gquiz   | Acceptance test site | gquiz0 | 2         | 1             | 1         | 1       |
       | gquiz   | Course gquiz | C1                   | gquiz1 | 2         | 1             | 1         | 0       |
       | gquiz   | Course anon gquiz | C1              | gquiz2 | 1         | 1             | 1         | 0       |
-    When I log in as "manager"
-    And I am on site homepage
-    And I follow "Site gquiz"
+    And I am on the "Site gquiz" "gquiz activity" page logged in as manager
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Multiple choice" question to the gquiz with:
       | Question                       | Do you like our site?              |
@@ -64,9 +62,7 @@ Feature: gquizs in courses with groups
 
   @javascript
   Scenario: Non anonymous gquiz with groups in a course
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    Given I am on the "Course gquiz" "gquiz activity" page logged in as teacher
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Multiple choice" question to the gquiz with:
       | Question                       | Do you like this course?           |
@@ -90,9 +86,7 @@ Feature: gquizs in courses with groups
     And I log in as "user7" and complete gquiz "Course gquiz" in course "Course 1" with:
       | I don't know | 1 |
     # View analysis, user1 should only see one group - group 1
-    And I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    And I am on the "Course gquiz" "gquiz activity" page logged in as user1
     And I follow "Submitted answers"
     And I should see "Separate groups: Group 1"
     And I show chart data for the "multichoice1" gquiz
@@ -100,9 +94,7 @@ Feature: gquizs in courses with groups
     And I should see "1 (25.00 %)" in the "Not at all" "table_row"
     And I log out
     # View analysis, user3 should only see one group - group 2
-    And I log in as "user3"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    And I am on the "Course gquiz" "gquiz activity" page logged in as user3
     And I follow "Submitted answers"
     And I should see "Separate groups: Group 2"
     And I show chart data for the "multichoice1" gquiz
@@ -110,9 +102,7 @@ Feature: gquizs in courses with groups
     And I should see "2 (66.67 %)" in the "Not at all" "table_row"
     And I log out
     # View analysis, user2 should see a group selector and be able to change the group but not view all.
-    And I log in as "user2"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    And I am on the "Course gquiz" "gquiz activity" page logged in as user2
     And I follow "Submitted answers"
     And the field "Separate groups" matches value "Group 1"
     And I show chart data for the "multichoice1" gquiz
@@ -125,9 +115,7 @@ Feature: gquizs in courses with groups
     And the "Separate groups" select box should not contain "All participants"
     And I log out
     # User without group can see all participants only
-    And I log in as "user7"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    And I am on the "Course gquiz" "gquiz activity" page logged in as user7
     And I follow "Submitted answers"
     And I should see "Separate groups: All participants"
     And I show chart data for the "multichoice1" gquiz
@@ -136,9 +124,7 @@ Feature: gquizs in courses with groups
     And I should see "2 (28.57 %)" in the "I don't know" "table_row"
     And I log out
     # Teacher can browse everybody
-    And I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Course gquiz"
+    And I am on the "Course gquiz" "gquiz activity" page logged in as teacher
     And I navigate to "Analysis" in current page administration
     And the field "Separate groups" matches value "All participants"
     And I show chart data for the "multichoice1" gquiz
@@ -163,13 +149,10 @@ Feature: gquizs in courses with groups
     And I select "All participants" from the "Separate groups" singleselect
     And I should see "Username 1"
     And I should see "Username 3"
-    And I log out
 
   @javascript
   Scenario: Anonymous gquiz with groups in a course
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    Given I am on the "Course anon gquiz" "gquiz activity" page logged in as teacher
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Multiple choice" question to the gquiz with:
       | Question                       | Do you like this course?           |
@@ -180,9 +163,7 @@ Feature: gquizs in courses with groups
     And I log out
     And I log in as "user1" and complete gquiz "Course anon gquiz" in course "Course 1" with:
       | Not at all | 1 |
-    And I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as user1
     And I follow "Submitted answers"
     And I should see "There are insufficient responses for this group"
     And I should not see "Yes of course"
@@ -200,9 +181,7 @@ Feature: gquizs in courses with groups
     And I log in as "user7" and complete gquiz "Course anon gquiz" in course "Course 1" with:
       | I don't know | 1 |
     # View analysis, user1 should only see one group - group 1
-    And I log in as "user1"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as user1
     And I follow "Submitted answers"
     And I should see "Separate groups: Group 1"
     And I show chart data for the "multichoice1" gquiz
@@ -210,9 +189,7 @@ Feature: gquizs in courses with groups
     And I should see "1 (25.00 %)" in the "Not at all" "table_row"
     And I log out
     # View analysis, user3 should only see one group - group 2
-    And I log in as "user3"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as user3
     And I follow "Submitted answers"
     And I should see "Separate groups: Group 2"
     And I show chart data for the "multichoice1" gquiz
@@ -220,9 +197,7 @@ Feature: gquizs in courses with groups
     And I should see "2 (66.67 %)" in the "Not at all" "table_row"
     And I log out
     # View analysis, user2 should see a group selector and be able to change the group but not view all.
-    And I log in as "user2"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as user2
     And I follow "Submitted answers"
     And the field "Separate groups" matches value "Group 1"
     And I show chart data for the "multichoice1" gquiz
@@ -235,9 +210,7 @@ Feature: gquizs in courses with groups
     And the "Separate groups" select box should not contain "All participants"
     And I log out
     # User without group can see all participants only
-    And I log in as "user7"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as user7
     And I follow "Submitted answers"
     And I should see "Separate groups: All participants"
     And I show chart data for the "multichoice1" gquiz
@@ -246,9 +219,7 @@ Feature: gquizs in courses with groups
     And I should see "2 (28.57 %)" in the "I don't know" "table_row"
     And I log out
     # Teacher can browse everybody
-    And I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Course anon gquiz"
+    And I am on the "Course anon gquiz" "gquiz activity" page logged in as teacher
     And I navigate to "Analysis" in current page administration
     And the field "Separate groups" matches value "All participants"
     And I show chart data for the "multichoice1" gquiz
@@ -274,4 +245,3 @@ Feature: gquizs in courses with groups
     And I select "All participants" from the "Separate groups" singleselect
     And "//tr[contains(@id,'_r6') and contains(.,'Response number')]" "xpath_element" should exist
     And "//tr[contains(@id,'_r7') and contains(@class,'emptyrow')]" "xpath_element" should exist
-    And I log out

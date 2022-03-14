@@ -78,6 +78,11 @@ $preview = html_writer::link($previewlnk, $previewimg);
 
 echo $OUTPUT->heading(format_string($gquiz->name) . $preview);
 
+// Render the activity information.
+$completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
+$activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id);
+echo $OUTPUT->activity_information($cm, $completiondetails, $activitydates);
+
 // Print the tabs.
 require('tabs.php');
 
@@ -97,7 +102,7 @@ if (has_capability('mod/gquiz:edititems', $context)) {
     $mygroupid = groups_get_activity_group($cm);
 
     echo $groupselect.'<div class="clearer">&nbsp;</div>';
-    $summary = new mod_gquiz\output\summary($gquizcompletion, $mygroupid, true);
+    $summary = new mod_gquiz\output\summary($gquizcompletion, $mygroupid);
     echo $OUTPUT->render_from_template('mod_gquiz/summary', $summary->export_for_template($OUTPUT));
 
     if ($pageaftersubmit = $gquizcompletion->page_after_submit()) {
@@ -124,6 +129,7 @@ if (has_capability('mod/gquiz:mapcourse', $context) && $gquiz->course == SITEID)
 }
 
 if ($gquizcompletion->can_complete()) {
+    
     echo $OUTPUT->box_start('generalbox boxaligncenter');
     if (!$gquizcompletion->is_open()) {
         // gquiz is not yet open or is already closed.

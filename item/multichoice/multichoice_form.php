@@ -20,11 +20,12 @@ class gquiz_multichoice_form extends gquiz_item_form {
     protected $type = "multichoice";
 
     public function definition() {
+        global $DB;
         $item = $this->_customdata['item'];
         $common = $this->_customdata['common'];
         $positionlist = $this->_customdata['positionlist'];
         $position = $this->_customdata['position'];
-
+ 
         $mform =& $this->_form;
 
         $mform->addElement('header', 'general', get_string($this->type, 'gquiz'));
@@ -43,7 +44,6 @@ class gquiz_multichoice_form extends gquiz_item_form {
                             array('size' => gquiz_ITEM_LABEL_TEXTBOX_SIZE,
                                   'maxlength' => 255));
 
-       
         /*  $mform->addElement('select',
                             'subtype',
                             get_string('multichoicetype', 'gquiz').'&nbsp;',

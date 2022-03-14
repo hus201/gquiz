@@ -50,7 +50,7 @@ switch ($action) {
     case 'saveitemorder':
         $itemlist = explode(',', trim($itemorder, ','));
         if (count($itemlist) > 0) {
-            $return = gquiz_ajax_saveitemorder($itemlist, $gquiz);
+            $return = gquiz_ajax_saveitemorder($itemlist, $feedback);
         }
         break;
 }

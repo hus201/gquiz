@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+use block_rss_client\output\item;
+
 defined('MOODLE_INTERNAL') OR die('not allowed');
 require_once($CFG->dirroot.'/mod/gquiz/item/gquiz_item_class.php');
 require_once($CFG->dirroot.'/mod/gquiz/classes/markcalculator.php');
@@ -25,7 +27,7 @@ define('gquiz_MULTICHOICE_HIDENOSELECT', 'h');
 
 class gquiz_item_multichoice extends gquiz_item_base {
     protected $type = "multichoice";
-
+    
     public function build_editform($item, $gquiz, $cm) {
         global $DB, $CFG;
         require_once('multichoice_form.php');
@@ -88,56 +90,55 @@ class gquiz_item_multichoice extends gquiz_item_base {
         }
 
         $this->set_ignoreempty($item, $item->ignoreempty);
-          //Edited by gquiz 
-          $this->set_hidenoselect($item);
+        //Edited by gquiz 
+        $this->set_hidenoselect($item);
 
         $item->hasvalue = $this->get_hasvalue();
         if (!$item->id) {
             $item->id = $DB->insert_record('gquiz_item', $item);
-               //Added by gquiz Start
-               if($item->isgraded){
-                $grade= new stdClass;
-                $grade->itemid= $item->id;
-                $grade->grade= $item->grade;
-                $grade->answer =$item->answer;
-                $DB->insert_record('gquiz_graded_qustions',$grade);
-                }
-                //Added by gquiz End
-
+            //Added by gquiz Start
+            if($item->isgraded){
+            $grade= new stdClass;
+            $grade->itemid= $item->id;
+            $grade->grade= $item->grade;
+            $grade->answer =$item->answer;
+            $DB->insert_record('gquiz_graded_qustions',$grade);
+            }
+            //Added by gquiz End
         } else {
             $DB->update_record('gquiz_item', $item);
             //Added by gquiz Start
                 //check if Edited Value is graded
-                if($item->isgraded){
-                    $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
-                    //Check if There is grade in db 
-                    if($grade){
-                        //Edit Existing Grade
-                        $grade->grade = $item->grade;
-                        $grade->answer = $item->answer;
-                        $DB->update_record('gquiz_graded_qustions',$grade);
-                    }else 
-                    {
-                        //Add Grade if Not Found One
-                        $grade= new stdClass;
-                        $grade->itemid= $item->id;
-                        $grade->grade= $item->grade;
-                        $grade->answer =$item->answer;
-                        $DB->insert_record('gquiz_graded_qustions',$grade);
-                    }
-                    mark_calculator::recalcluate_marks(0,$item->gquiz);
-                }else {
-                    $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
-                    //Check if There is grade in db 
-                    if($grade){
-                        //Recalculate Marks Then 
-                        mark_calculator::recalcluate_marks(0,$item->gquiz);
-                    }
-                    
+            if($item->isgraded){
+                $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
+                //Check if There is grade in db 
+                if($grade){
+                    //Edit Existing Grade
+                    $grade->grade = $item->grade;
+                    $grade->answer = $item->answer;
+                    $DB->update_record('gquiz_graded_qustions',$grade);
+                }else 
+                {
+                    //Add Grade if Not Found One
+                    $grade= new stdClass;
+                    $grade->itemid= $item->id;
+                    $grade->grade= $item->grade;
+                    $grade->answer =$item->answer;
+                    $DB->insert_record('gquiz_graded_qustions',$grade);
                 }
-                //Added by gquiz End
+                mark_calculator::recalcluate_marks(0,$item->gquiz);
+            }else {
+                $grade=$DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
+                //Check if There is grade in db 
+                if($grade){
+                    //Recalculate Marks Then 
+                    mark_calculator::recalcluate_marks(0,$item->gquiz);
+                }
+                
+            }
+            //Added by gquiz End
         }
-
+   
         return $DB->get_record('gquiz_item', array('id'=>$item->id));
     }
 

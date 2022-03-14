@@ -20,6 +20,10 @@
  * @copyright  2016 Stephen Bourget
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_gquiz;
+
+use mod_gquiz_completion;
+
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/gquiz/lib.php');
@@ -30,7 +34,7 @@ require_once($CFG->dirroot . '/mod/gquiz/lib.php');
  * @copyright  2016 Stephen Bourget
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_gquiz_lib_testcase extends advanced_testcase {
+class lib_test extends \advanced_testcase {
 
     public function test_gquiz_initialise() {
         $this->resetAfterTest();
@@ -59,7 +63,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         foreach ($constructorparams as $params) {
             $structure = new mod_gquiz_completion($params[0], $params[1], 0);
             $this->assertTrue($structure->is_open());
-            $this->assertTrue($structure->get_cm() instanceof cm_info);
+            $this->assertTrue($structure->get_cm() instanceof \cm_info);
             $this->assertEquals($gquiz->cmid, $structure->get_cm()->id);
             $this->assertEquals($gquiz->intro, $structure->get_gquiz()->intro);
         }
@@ -83,7 +87,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $params['timeclose'] = $timeclose;
         $gquiz = $generator->create_instance($params);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id);
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
 
         // Normal case, with existing course.
         $this->assertTrue(gquiz_refresh_events($course->id));
@@ -135,7 +139,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         );
         $gquiz = $this->getDataGenerator()->create_module('gquiz', $record);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id, $course->id);
-        $cm = cm_info::create($cm);
+        $cm = \cm_info::create($cm);
 
         $this->setUser($student);
         // Check that upon creation, the updates are only about the new configuration created.
@@ -417,7 +421,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $gquiz = $this->getDataGenerator()->create_module('gquiz', ['course' => $course->id]);
         $event = $this->create_action_event($course->id, $gquiz->id, gquiz_EVENT_TYPE_OPEN);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id);
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
         $this->getDataGenerator()->enrol_user($user->id, $course->id, $studentrole->id, 'manual');
 
         $this->setUser($user);
@@ -445,7 +449,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $gquiz = $this->getDataGenerator()->create_module('gquiz', ['course' => $course->id]);
         $event = $this->create_action_event($course->id, $gquiz->id, gquiz_EVENT_TYPE_OPEN);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id);
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
         $this->getDataGenerator()->enrol_user($user->id, $course->id, $studentrole->id, 'manual');
 
         assign_capability('mod/gquiz:complete', CAP_PROHIBIT, $studentrole->id, $context);
@@ -478,7 +482,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $gquiz = $this->getDataGenerator()->create_module('gquiz', ['course' => $course->id]);
         $event = $this->create_action_event($course->id, $gquiz->id, gquiz_EVENT_TYPE_OPEN);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id);
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
 
         $this->setUser($user);
 
@@ -514,7 +518,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $gquiz = $this->getDataGenerator()->create_module('gquiz', ['course' => $course->id]);
         $event = $this->create_action_event($course->id, $gquiz->id, gquiz_EVENT_TYPE_OPEN);
         $cm = get_coursemodule_from_instance('gquiz', $gquiz->id);
-        $context = context_module::instance($cm->id);
+        $context = \context_module::instance($cm->id);
 
         $this->setUser($user);
 
@@ -559,7 +563,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
             \core_completion\api::COMPLETION_EVENT_TYPE_DATE_COMPLETION_EXPECTED);
 
         // Mark the activity as completed.
-        $completion = new completion_info($course);
+        $completion = new \completion_info($course);
         $completion->set_module_viewed($cm);
 
         // Create an action factory.
@@ -593,7 +597,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
             \core_completion\api::COMPLETION_EVENT_TYPE_DATE_COMPLETION_EXPECTED);
 
         // Mark the activity as completed for the student.
-        $completion = new completion_info($course);
+        $completion = new \completion_info($course);
         $completion->set_module_viewed($cm, $student->id);
 
         // Create an action factory.
@@ -615,7 +619,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
      * @return bool|calendar_event
      */
     private function create_action_event($courseid, $instanceid, $eventtype) {
-        $event = new stdClass();
+        $event = new \stdClass();
         $event->name = 'Calendar event';
         $event->modulename = 'gquiz';
         $event->courseid = $courseid;
@@ -624,7 +628,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $event->eventtype = $eventtype;
         $event->timestart = time();
 
-        return calendar_event::create($event);
+        return \calendar_event::create($event);
     }
 
     /**
@@ -648,13 +652,13 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
             'completion' => 2,
             'completionsubmit' => 0
         ]);
-        $cm1 = cm_info::create(get_coursemodule_from_instance('gquiz', $gquiz1->id));
-        $cm2 = cm_info::create(get_coursemodule_from_instance('gquiz', $gquiz2->id));
+        $cm1 = \cm_info::create(get_coursemodule_from_instance('gquiz', $gquiz1->id));
+        $cm2 = \cm_info::create(get_coursemodule_from_instance('gquiz', $gquiz2->id));
 
         // Data for the stdClass input type.
         // This type of input would occur when checking the default completion rules for an activity type, where we don't have
         // any access to cm_info, rather the input is a stdClass containing completion and customdata attributes, just like cm_info.
-        $moddefaults = new stdClass();
+        $moddefaults = new \stdClass();
         $moddefaults->customdata = ['customcompletionrules' => ['completionsubmit' => 1]];
         $moddefaults->completion = 2;
 
@@ -662,7 +666,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $this->assertEquals(mod_gquiz_get_completion_active_rule_descriptions($cm1), $activeruledescriptions);
         $this->assertEquals(mod_gquiz_get_completion_active_rule_descriptions($cm2), []);
         $this->assertEquals(mod_gquiz_get_completion_active_rule_descriptions($moddefaults), $activeruledescriptions);
-        $this->assertEquals(mod_gquiz_get_completion_active_rule_descriptions(new stdClass()), []);
+        $this->assertEquals(mod_gquiz_get_completion_active_rule_descriptions(new \stdClass()), []);
     }
 
     /**
@@ -1023,7 +1027,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $generator = $this->getDataGenerator();
         $user = $generator->create_user();
         $course = $generator->create_course();
-        $context = context_course::instance($course->id);
+        $context = \context_course::instance($course->id);
         $roleid = $generator->create_role();
         $gquizgenerator = $generator->get_plugin_generator('mod_gquiz');
         $timeopen = time();
@@ -1082,7 +1086,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
         $generator = $this->getDataGenerator();
         $user = $generator->create_user();
         $course = $generator->create_course();
-        $context = context_course::instance($course->id);
+        $context = \context_course::instance($course->id);
         $roleid = $generator->create_role();
         $gquizgenerator = $generator->get_plugin_generator('mod_gquiz');
         $timeopen = time();
@@ -1143,7 +1147,7 @@ class mod_gquiz_lib_testcase extends advanced_testcase {
     public function test_creation_with_no_calendar_capabilities() {
         $this->resetAfterTest();
         $course = self::getDataGenerator()->create_course();
-        $context = context_course::instance($course->id);
+        $context = \context_course::instance($course->id);
         $user = self::getDataGenerator()->create_and_enrol($course, 'editingteacher');
         $roleid = self::getDataGenerator()->create_role();
         self::getDataGenerator()->role_assign($roleid, $user->id, $context->id);

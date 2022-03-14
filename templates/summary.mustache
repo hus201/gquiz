@@ -31,8 +31,7 @@
     Example context (json):
     {
         "completedcount" : 15,
-        "itemscount" : 5,
-        "timeopen" : "May 15, 2016"
+        "itemscount" : 5
     }
 
 }}
@@ -48,20 +47,3 @@
         class="gquiz_info">{{#str}}questions, mod_gquiz{{/str}}: </span><span
         class="gquiz_info_value">{{itemscount}}</span>
 </div>
-
-{{#timeopen}}
-    <div class="gquiz_info">
-        <span
-            class="gquiz_info">{{#str}}gquizopen, mod_gquiz{{/str}}: </span><span
-            class="gquiz_info_value">{{timeopen}}</span>
-    </div>
-{{/timeopen}}
-
-{{#timeclose}}
-    <div class="gquiz_info">
-        <span
-            class="gquiz_info">{{#str}}gquizclose, mod_gquiz{{/str}}: </span><span
-            class="gquiz_info_value">{{timeclose}}</span>
-    </div>
-{{/timeclose}}
-

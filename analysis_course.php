@@ -50,7 +50,7 @@ $context = context_module::instance($cm->id);
 
 require_course_login($course, true, $cm);
 
-$gquiz = $PAGE->activityrecord;
+$feedback = $PAGE->activityrecord;
 
 if (!($gquiz->publish_stats OR has_capability('mod/gquiz:viewreports', $context))) {
     print_error('error');

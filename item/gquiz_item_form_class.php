@@ -123,18 +123,18 @@ abstract class gquiz_item_form extends moodleform {
         }
         return $item;
     }
-        //Added by gquiz Start
-        protected function gradeable(MoodleQuickForm $mform, String $Hint=""){
-            $mform->addElement('advcheckbox', 'isgraded', get_string('isgraded','gquiz'), '' , null , array(0, 1));
-            $mform->addElement('text','grade',get_string('grade','gquiz'));
-            $mform->settype('grade',PARAM_INT);
-            $mform->addElement('text','answer',get_string('answer','gquiz'));
-            $mform->addElement('static','answerhint');
-            $mform->setDefault('answerhint',$Hint);
-            $mform->disabledIf('grade','isgraded');
-            $mform->disabledIf('answer','isgraded');
-    
-        }
-        //Added by gquiz End
+    //Added by gquiz Start
+    protected function gradeable(MoodleQuickForm $mform, String $Hint=""){
+        $mform->addElement('advcheckbox', 'isgraded', get_string('isgraded','gquiz'), '' , null , array(0, 1));
+        $mform->addElement('text','grade',get_string('grade','gquiz'));
+        $mform->settype('grade',PARAM_INT);
+        $mform->addElement('text','answer',get_string('answer','gquiz'));
+        $mform->addElement('static','answerhint');
+        $mform->setDefault('answerhint',$Hint);
+        $mform->disabledIf('grade','isgraded');
+        $mform->disabledIf('answer','isgraded');
+
+    }
+    //Added by gquiz End
 }
 

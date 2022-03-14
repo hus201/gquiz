@@ -565,6 +565,10 @@ class mod_gquiz_completion extends mod_gquiz_structure {
         $completedid = gquiz_save_tmp_values($gquizcompletedtmp, $gquizcompleted);
         $this->completed = $DB->get_record('gquiz_completed', array('id' => $completedid));
 
+      
+        
+        
+
         // Send email.
         if ($this->gquiz->anonymous == gquiz_ANONYMOUS_NO) {
             gquiz_send_email($this->cm, $this->gquiz, $this->cm->get_course(), $this->userid, $this->completed);
@@ -582,6 +586,7 @@ class mod_gquiz_completion extends mod_gquiz_structure {
         }
         //Added by gquiz
         mark_calculator::calculate_mark($this->completed);
+        
     }
 
     /**

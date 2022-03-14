@@ -67,17 +67,15 @@ class mod_gquiz_responses_anon_table extends mod_gquiz_responses_table {
         $this->define_headers($tableheaders);
         $this->sortable(true, 'mark');
         //Added by gquiz Start
-
-     
-
         $this->sortable(true, 'random_response');
+        
         $this->collapsible(true);
         $this->set_attribute('id', 'showentryanontable');
 
         $params = ['instance' => $cm->instance,
             'anon' => gquiz_ANONYMOUS_YES,
             'courseid' => $this->gquizstructure->get_courseid()];
-
+        //Editedb by gquiz
         $fields = 'c.id, c.random_response, c.courseid,c.mark';
         $from = '{gquiz_completed} c';
         $where = 'c.anonymous_response = :anon AND c.gquiz = :instance';

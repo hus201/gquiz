@@ -42,25 +42,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 function xmldb_gquiz_upgrade($oldversion) {
-    global $CFG;
+    global $CFG,$DB;
+    $dbman = $DB->get_manager();
+    if ($oldversion < 20160512) {
+        // Add new fields to certificate table.
+        $table = new xmldb_table('gquiz');
+        $field = new xmldb_field('showcode');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'savecert');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+    
 
-    // Automatically generated Moodle v3.5.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.6.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.7.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.8.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.9.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.10.0 release upgrade line.
-    // Put any upgrade step following this.
-
+        // Certificate savepoint reached.
+        upgrade_mod_savepoint(true, 20160512, 'gquiz');
+    }
     return true;
 }

@@ -23,11 +23,14 @@ Feature: gquiz with no calendar capabilites
     And I log out
 
   Scenario: Editing a gquiz
-    Given I log in as "admin"
-    And I am on "Course 1" course homepage with editing mode on
-    When I add a "gquiz" to section "1" and I fill the form with:
-      | Name | Test gquiz name |
-      | Description | Test gquiz description |
+    Given the following "activities" exist:
+      | activity   | name                   | intro                         | course | idnumber    |
+      | gquiz   | Test gquiz name     | Test gquiz description     | C1     | gquiz1   |
+    And I log in as "admin"
+    And I am on "Course 1" course homepage
+    And I follow "Test gquiz name"
+    And I navigate to "Edit settings" in current page administration
+    And I set the following fields to these values:
       | id_timeopen_enabled | 1 |
       | id_timeopen_day | 1 |
       | id_timeopen_month | 1 |
@@ -36,6 +39,7 @@ Feature: gquiz with no calendar capabilites
       | id_timeclose_day | 1 |
       | id_timeclose_month | 2 |
       | id_timeclose_year | 2017 |
+    And I press "Save and return to course"
     And I log out
     When I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on

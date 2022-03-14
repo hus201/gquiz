@@ -108,8 +108,7 @@ class behat_mod_gquiz extends behat_base {
         $this->execute('behat_auth::i_log_in_as', $username);
 
         // Navigate to gquiz complete form.
-        $this->execute('behat_navigation::i_am_on_course_homepage', $coursename);
-        $this->execute('behat_general::click_link', $gquizname);
+        $this->execute('behat_navigation::i_am_on_page_instance', [$gquizname, 'gquiz activity']);
         $this->execute('behat_general::click_link', $completeform);
 
         // Fill form and submit.

@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020110900;       // The current module version (Date: YYYYMMDDXX)
-$plugin->requires  = 2020110300;    // Requires this Moodle version
+$plugin->version   = 2021051706;       // The current module version (Date: YYYYMMDDXX).
+$plugin->requires  = 2020110904;    // Requires this Moodle version.
 $plugin->component = 'mod_gquiz';   // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 0;
 

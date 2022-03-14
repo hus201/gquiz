@@ -20,11 +20,19 @@ class gquiz_textfield_form extends gquiz_item_form {
     protected $type = "textfield";
 
     public function definition() {
+        global $DB;
         $item = $this->_customdata['item'];
         $common = $this->_customdata['common'];
         $positionlist = $this->_customdata['positionlist'];
         $position = $this->_customdata['position'];
-
+        //Added by gquiz Start
+        if($item->isgraded){
+            $gradedata = $DB->get_record('gquiz_graded_qustions',['itemid'=>$item->id]);
+            $item->grade = $gradedata->grade;
+            $item->answer = $gradedata->answer;
+        }
+        //Added by gquiz End
+        
         $mform =& $this->_form;
 
         $mform->addElement('header', 'general', get_string($this->type, 'gquiz'));

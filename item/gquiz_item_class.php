@@ -285,6 +285,7 @@ abstract class gquiz_item_base {
      * @since  Moodle 3.3
      */
     abstract public function get_analysed_for_external($item, $groupid = false, $courseid = false);
+
 }
 
 //a dummy class to realize pagebreaks
@@ -371,4 +372,5 @@ class gquiz_item_pagebreak extends gquiz_item_base {
     public function get_analysed_for_external($item, $groupid = false, $courseid = false) {
         return;
     }
+ 
 }

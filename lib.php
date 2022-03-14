@@ -42,6 +42,8 @@ define('gquiz_DEFAULT_PAGE_COUNT', 20);
 define('gquiz_EVENT_TYPE_OPEN', 'open');
 define('gquiz_EVENT_TYPE_CLOSE', 'close');
 
+//require_once(__DIR__ . '/deprecatedlib.php');
+
 /**
  * @uses FEATURE_GROUPS
  * @uses FEATURE_GROUPINGS
@@ -78,7 +80,7 @@ function gquiz_supports($feature) {
  */
 function gquiz_add_instance($gquiz) {
     global $DB;
-
+    
     $gquiz->timemodified = time();
     $gquiz->id = '';
 
@@ -88,9 +90,9 @@ function gquiz_add_instance($gquiz) {
 
     //saving the gquiz in db
     $gquizid = $DB->insert_record("gquiz", $gquiz);
-
+    
     $gquiz->id = $gquizid;
-
+    
     gquiz_set_events($gquiz);
 
     if (!isset($gquiz->coursemodule)) {
@@ -116,8 +118,9 @@ function gquiz_add_instance($gquiz) {
         $gquiz->page_after_submitformat = $gquiz->page_after_submit_editor['format'];
     }
     $DB->update_record('gquiz', $gquiz);
-
+   
     return $gquizid;
+    
 }
 
 /**
@@ -388,7 +391,8 @@ function gquiz_get_recent_mod_activity(&$activities, &$index,
 
     $sqlargs = array();
 
-    $userfields = user_picture::fields('u', null, 'useridagain');
+    $userfieldsapi = \core_user\fields::for_userpic();
+    $userfields = $userfieldsapi->get_sql('u', false, '', 'useridagain', false)->selects;
     $sql = " SELECT fk . * , fc . * , $userfields
                 FROM {gquiz_completed} fc
                     JOIN {gquiz} fk ON fk.id = fc.gquiz
@@ -508,32 +512,6 @@ function gquiz_print_recent_mod_activity($activity, $courseid, $detail, $modname
     echo "</td></tr></table>";
 
     return;
-}
-
-/**
- * Obtains the automatic completion state for this gquiz based on the condition
- * in gquiz settings.
- *
- * @param object $course Course
- * @param object $cm Course-module
- * @param int $userid User ID
- * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
- * @return bool True if completed, false if not, $type if conditions not set.
- */
-function gquiz_get_completion_state($course, $cm, $userid, $type) {
-    global $CFG, $DB;
-
-    // Get gquiz details
-    $gquiz = $DB->get_record('gquiz', array('id'=>$cm->instance), '*', MUST_EXIST);
-
-    // If completion option is enabled, evaluate it and return true/false
-    if ($gquiz->completionsubmit) {
-        $params = array('userid'=>$userid, 'gquiz'=>$gquiz->id);
-        return $DB->record_exists('gquiz_completed', $params);
-    } else {
-        // Completion option is not enabled so just return $type
-        return $type;
-    }
 }
 
 /**
@@ -985,7 +963,8 @@ function gquiz_get_incomplete_users(cm_info $cm,
 
     //first get all user who can complete this gquiz
     $cap = 'mod/gquiz:complete';
-    $allnames = get_all_user_name_fields(true, 'u');
+    $userfieldsapi = \core_user\fields::for_name();
+    $allnames = $userfieldsapi->get_sql('u', false, '', '', false)->selects;
     $fields = 'u.id, ' . $allnames . ', u.picture, u.email, u.imagealt';
     if (!$allusers = get_users_by_capability($context,
                                             $cap,
@@ -1122,7 +1101,8 @@ function gquiz_get_complete_users($cm,
         $sortsql = '';
     }
 
-    $ufields = user_picture::fields('u');
+    $userfieldsapi = \core_user\fields::for_userpic();
+    $ufields = $userfieldsapi->get_sql('u', false, '', '', false)->selects;
     $sql = 'SELECT DISTINCT '.$ufields.', c.timemodified as completed_timemodified
             FROM {user} u, {gquiz_completed} c '.$fromgroup.'
             WHERE '.$where.' anonymous_response = :anon
@@ -1644,6 +1624,7 @@ function gquiz_delete_item($itemid, $renumber = true, $template = false) {
     //remove all depends
     $DB->set_field('gquiz_item', 'dependvalue', '', array('dependitem'=>$itemid));
     $DB->set_field('gquiz_item', 'dependitem', 0, array('dependitem'=>$itemid));
+
 
     $DB->delete_records("gquiz_item", array("id"=>$itemid));
     // Added by gquiz Start
@@ -3036,6 +3017,7 @@ function gquiz_check_updates_since(cm_info $cm, $from, $filter = array()) {
  * @param int $userid User id to use for all capability checks, etc. Set to 0 for current user (default).
  * @return \core_calendar\local\event\entities\action_interface|null
  */
+
 function mod_gquiz_core_calendar_provide_event_action(calendar_event $event,
                                                          \core_calendar\action_factory $factory,
                                                          int $userid = 0) {

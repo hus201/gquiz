@@ -17,7 +17,6 @@
  * Edit items in gquiz module
  *
  * @module     mod_gquiz/edit
- * @package    mod_gquiz
  * @copyright  2016 Marina Glancy
  */
 define(['jquery', 'core/ajax', 'core/str', 'core/notification'],

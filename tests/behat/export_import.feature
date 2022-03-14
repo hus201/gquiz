@@ -21,9 +21,7 @@ Feature: Exporting and importing gquizs
       | gquiz   | Learning experience | C1     | gquiz0   |
 
   Scenario: Export sample gquiz and compare with the fixture
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Learning experience"
+    When I am on the "Learning experience" "gquiz activity" page logged in as teacher
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Information" question to the gquiz with:
       | Question         | this is an information question |
@@ -73,9 +71,7 @@ Feature: Exporting and importing gquizs
 
   @javascript @_file_upload
   Scenario: Import gquiz deleting old items
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Learning experience"
+    When I am on the "Learning experience" "gquiz activity" page logged in as teacher
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Numeric answer" question to the gquiz with:
       | Question               | Existing question |
@@ -96,13 +92,10 @@ Feature: Exporting and importing gquizs
     And I should see "this is a multiple choice rated"
     And I should see "this is a numeric answer"
     And I should see "this is a short text answer"
-    And I log out
 
   @javascript @_file_upload
   Scenario: Import gquiz appending new items
-    When I log in as "teacher"
-    And I am on "Course 1" course homepage
-    And I follow "Learning experience"
+    When I am on the "Learning experience" "gquiz activity" page logged in as teacher
     And I click on "Edit questions" "link" in the "[role=main]" "css_element"
     And I add a "Numeric answer" question to the gquiz with:
       | Question               | Existing question |
@@ -125,4 +118,3 @@ Feature: Exporting and importing gquizs
     And I should see "this is a multiple choice rated"
     And I should see "this is a numeric answer"
     And I should see "this is a short text answer"
-    And I log out
